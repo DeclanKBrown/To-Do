@@ -1,0 +1,87 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    --aside-col: #f5f5f5;
+    --ol-col: #e8e8e8;
+    --main-col: #FFFFFF;
+    --side-text-col: #3B3E41;
+}
+
+:root.dark {
+    --aside-col: ;
+    --main-col: ;
+}
+
+body {
+    font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+}
+
+/* 
+SIDEBAR
+*/
+aside {
+    background-color: var(--aside-col);
+    display: grid;
+    grid-template-rows: 3rem 1fr 3rem;
+    justify-items: center;
+    border-right: 1px solid var(--ol-col);
+}
+
+.aside-inner {
+    width: 80%;
+    grid-row: 2 / 3;
+    overflow-y: scroll;
+    display: grid;
+    grid-template-rows: auto;
+    gap: 2rem;
+}
+
+.aside-top {
+    display: grid;
+    grid-template-rows: min-content min-content 1fr;
+    gap: 2rem;
+}
+
+.side-tab {
+    display: grid;
+    grid-template-columns: 25px 1fr;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.side-tab, .side-tab svg {
+    color: var(--side-text-col);
+    fill: var(--side-text-col)
+}
+
+.side-tab span {
+    font-size: 1.2rem;
+}
+
+.time-container {
+    display: grid;
+    grid-template-rows: min-content;
+    gap: 1rem;
+}
+
+.aside-bottom {
+    width: 100%;
+    grid-row: 3 / 4;
+    display: grid;
+    border-top: 1px solid var(--ol-col);
+    justify-items: center;
+    align-items: center;
+}
+
+.aside-bottom-inner {
+    width: 80%;
+}
+
