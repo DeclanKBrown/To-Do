@@ -205,6 +205,7 @@ export default function sidebar() {
             if (newProject.classList.contains('side-tab-sel')) {
                 const inputField = document.createElement('input');
                 inputField.type = 'text';
+                inputField.classList.add('name-proj');
                 if (newProjectText.innerHTML !== 'New Project') {
                     inputField.value = newProjectText.innerHTML;
                 };
@@ -228,7 +229,6 @@ export default function sidebar() {
      //Open and close side bar 
      asideTogEm.addEventListener('click', () => {
         if (aside.classList.contains('aside-closed')) {
-            console.log('fuck')
             aside.classList.remove('aside-closed');
             asideTogEm.classList.remove('menu-tog-closed');
         } else {
@@ -246,7 +246,6 @@ export default function sidebar() {
         anytimeCont.classList.remove('side-tab-sel');
         projectsHeadCont.classList.remove('side-tab-sel');
         let projes = document.querySelectorAll('.new-project');
-        console.log(projes);
         if (projes) {
             projes.forEach(proj => {
                 proj.classList.remove('side-tab-sel'); 

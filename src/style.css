@@ -157,3 +157,17 @@ aside {
     cursor: text;
 }
 
+.name-proj {
+    width: 80%;
+    padding-left: 0.2rem;
+    font-size: 1rem;
+    color: var(--side-sec-text-col);
+    background-color: transparent;
+    border: none;
+}
+
+.name-proj:focus {
+    outline: none
+}
+
+
