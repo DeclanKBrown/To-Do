@@ -178,13 +178,14 @@ export default function sidebar() {
 
     addListCont.addEventListener('click', createProj);
 
+    //Creates new Project Button
     function createProj() {
         const newProject = document.createElement('div');
         newProject.classList.add('side-tab');
         newProject.classList.add('new-project');
 
         const newProjectEm = document.createElement('span');
-        newProjectEm.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>database</title><path d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z" /></svg>'
+        newProjectEm.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>timelapse</title><path d="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M16.24,7.76C15.07,6.58 13.53,6 12,6V12L7.76,16.24C10.1,18.58 13.9,18.58 16.24,16.24C18.59,13.9 18.59,10.1 16.24,7.76Z" /></svg>';
 
         const newProjectText = document.createElement('span');
         newProjectText.innerHTML = 'New Project';
@@ -198,8 +199,33 @@ export default function sidebar() {
             newProject.classList.add('side-tab-sel');
             removeContent();
         })
-    }
 
+        //Allowe user to input project name
+        newProjectText.addEventListener('click', () => {
+            if (newProject.classList.contains('side-tab-sel')) {
+                const inputField = document.createElement('input');
+                inputField.type = 'text';
+                if (newProjectText.innerHTML !== 'New Project') {
+                    inputField.value = newProjectText.innerHTML;
+                };
+    
+                newProjectText.parentNode.replaceChild(inputField, newProjectText);
+
+                inputField.focus();
+              
+                // Handle blur event to restore the span when clicking outside the input
+                inputField.addEventListener('blur', function() {
+                    if (inputField.value === '') {
+                        inputField.value = 'New Project';
+                    }
+                  newProjectText.innerHTML = inputField.value;
+                  inputField.parentNode.replaceChild(newProjectText, inputField);
+                });
+            }
+        });
+    };
+
+    //Remove Selected Tab Styling
     function removeSel() {
         inboxCont.classList.remove('side-tab-sel');
         todayCont.classList.remove('side-tab-sel');
@@ -216,6 +242,7 @@ export default function sidebar() {
         }
     }
 
+    //Remove The Content From Main
     function removeContent() {
         const main = document.querySelector('main');
         if (main) {

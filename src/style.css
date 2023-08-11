@@ -15,7 +15,7 @@
     --ol-col: #e8e8e8;
     --main-col: #FFFFFF;
     --side-text-col: #3B3E41;
-    --side-sec-text-col: #505457;
+    --side-sec-text-col: #606468;
     --sel-col: #DBDEE1;
 }
 
@@ -141,5 +141,9 @@ aside {
 .new-project, .new-project svg {
     color: var(--side-sec-text-col);
     fill: var(--side-sec-text-col);
+}
+
+.new-project {
+    cursor: text;
 }
 
