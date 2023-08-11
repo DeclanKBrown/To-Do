@@ -15,7 +15,7 @@ export default function sidebar() {
 
     const asideTogEm = document.createElement('span');
     asideTogEm.classList.add('menu-tog');
-    asideTogEm.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>menu</title><path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" /></svg>'
+    asideTogEm.innerHTML = '<svg class="toggler-p" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>menu</title><path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" /></svg>'
 
     const asideInner = document.createElement('div'); //side bar inner
     asideInner.classList.add('aside-inner');
@@ -224,6 +224,18 @@ export default function sidebar() {
             }
         });
     };
+
+     //Open and close side bar 
+     asideTogEm.addEventListener('click', () => {
+        if (aside.classList.contains('aside-closed')) {
+            console.log('fuck')
+            aside.classList.remove('aside-closed');
+            asideTogEm.classList.remove('menu-tog-closed');
+        } else {
+            aside.classList.add('aside-closed');
+            asideTogEm.classList.add('menu-tog-closed');
+        }
+    });
 
     //Remove Selected Tab Styling
     function removeSel() {
