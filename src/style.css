@@ -72,6 +72,10 @@ aside {
     grid-column: 3 / 4;
 }
 
+.toggler {
+    fill: var(--side-text-col);
+}
+
 .menu-tog-closed {
     grid-column: 1 / 2;
 }
@@ -83,6 +87,7 @@ aside {
     display: grid;
     grid-template-rows: auto;
     gap: 2rem;
+    overflow-x: hidden;
 }
 
 .aside-top {

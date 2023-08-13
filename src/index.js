@@ -1,6 +1,4 @@
 import './style.css'
-import sidebar from './sidebar.js'
+import UI from './modules/UI.js'
 
-window.onload = () => {
-    sidebar();
-}
+document.addEventListener('DOMContentLoaded', UI.loadHome)
