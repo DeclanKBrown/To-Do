@@ -17,6 +17,7 @@
     --side-text-col: #3B3E41;
     --side-sec-text-col: #606468;
     --sel-col: #DBDEE1;
+    --main-text-col: #0B0D11;
 }
 
 :root.dark {
@@ -126,6 +127,7 @@ aside {
     font-size: 1.2rem;
     cursor: pointer;
     padding-bottom: 0.2rem;
+    user-select: none;
 }
 
 .time-container {
@@ -173,6 +175,76 @@ aside {
 
 .name-proj:focus {
     outline: none
+}
+
+main {
+    display: grid;
+    align-content: center;
+    grid-template-rows: 3rem 1fr 3rem;
+}
+
+.main-upper {
+    border-bottom: 1px solid var(--ol-col);
+    display: grid;
+    grid-template-columns: 30px;
+    align-items: center;
+    justify-content: end;
+    padding-right: 10rem;
+}
+
+.main-upper svg {
+    fill: var(--side-text-col);
+}
+
+.main-inner {
+    width: 60%;
+    justify-self: center;
+    grid-row: 2 / 3;
+}
+
+.add-to-do {
+    display: grid;
+    grid-template-columns: 30px auto;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.add-to-do-container:hover {
+    background-color: var(--sel-col);
+    border-radius: 0.3rem;
+}
+
+.title {
+    color: var(--main-text-col);
+    font-size: 2.5rem;
+    user-select: none;
+}
+
+.main-bottom {
+    grid-row: 3 / 4;
+    display: grid;
+    grid-template-columns: 6fr 1fr;
+    align-items: center;
+    justify-items: center;
+    border-top: 1px solid var(--ol-col);
+}
+
+.footer {
+    display: grid;
+    grid-template-columns: auto 30px;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 1rem;
+    color: var(--main-text-col);
+    user-select: none;
+}
+
+.footer svg {
+    fill: var(--main-text-col);
 }
 
 
