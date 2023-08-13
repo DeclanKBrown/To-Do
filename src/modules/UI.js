@@ -19,7 +19,7 @@ export default class UI {
         </div>
         <div class="aside-inner">
             <div class="aside-top">
-                <div class="side-tab side-tab-sel" id="inbox">
+                <div class="side-tab side-tab-sel" id="Inbox">
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <title>inbox</title>
@@ -29,7 +29,7 @@ export default class UI {
                     <h1>Inbox</h1>
                 </div>
                 <div class="time-container">
-                    <div class="side-tab" id="today">
+                    <div class="side-tab" id="Today">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <title>star-outline</title>
@@ -38,7 +38,7 @@ export default class UI {
                         </span>
                         <h1>Today</h1>
                     </div>
-                    <div class="side-tab" id="week">
+                    <div class="side-tab" id="Week">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <title>calendar-range</title>
@@ -47,7 +47,7 @@ export default class UI {
                         </span>
                         <h1>Week</h1>
                     </div>
-                    <div class="side-tab" id="month">
+                    <div class="side-tab" id="Month">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <title>calendar-month</title>
@@ -56,7 +56,7 @@ export default class UI {
                         </span>
                         <h1>Month</h1>
                     </div>
-                    <div class="side-tab" id="anytime">
+                    <div class="side-tab" id="Anytime">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <title>note</title>
@@ -67,7 +67,7 @@ export default class UI {
                     </div>
                 </div>
                 <div class="projects-container">
-                    <div class="side-tab" id="projects">
+                    <div class="side-tab" id="Projects">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <title>database</title>
@@ -81,7 +81,7 @@ export default class UI {
         </div>
         <div class="aside-bottom">
             <div class="aside-bottom-inner">
-                <div class="side-tab" id="add-project">
+                <div class="side-tab add-project">
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <title>plus</title>
@@ -100,7 +100,7 @@ export default class UI {
     static initButtons() {
         const hamMenu = document.querySelector('.toggler');
         const tabs = document.querySelectorAll('.side-tab');
-        const addBtn = document.querySelector('#add-project');
+        const addBtn = document.querySelector('.add-project');
 
         hamMenu.addEventListener('click', UI.toggleMenu);
         tabs.forEach((tab) => tab.addEventListener('click', () => UI.tab(tab)));
@@ -122,6 +122,8 @@ export default class UI {
     static tab(e) {
         UI.removeTabStyle();
         UI.tabStyle(e);
+        UI.removeProject();
+        UI.openProject(e);
     }
 
     static removeTabStyle() {
@@ -137,7 +139,7 @@ export default class UI {
         const proj = document.createElement('div');
         proj.id = 'projectsCont';
         proj.innerHTML = `
-        <div class="side-tab new-project">
+        <div class="side-tab new-project" id="New Project">
             <span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <title>timelapse</title>
@@ -149,6 +151,7 @@ export default class UI {
     document.querySelector('.projects-container').appendChild(proj);
 
     UI.initProject();
+    UI.openProject(proj.firstElementChild);
     }
 
     static initProject() {
@@ -178,8 +181,12 @@ export default class UI {
             inputField.addEventListener('blur', function() {
                 if (inputField.value === '') {
                     inputField.value = 'New Project';
+                    inputField.parentNode.id = 'New Project'
+                } else {
+                    inputField.parentNode.id = inputField.value
                 }
             input.innerHTML = inputField.value;
+            document.querySelector('.title').innerHTML = inputField.value;
             inputField.parentNode.replaceChild(input, inputField);
             });
         }
@@ -189,16 +196,18 @@ export default class UI {
         const main = document.createElement('main');
         main.innerHTML = `
         <div class="main-upper">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <title>white-balance-sunny</title>
-                <path d="M3.55 19.09L4.96 20.5L6.76 18.71L5.34 17.29M12 6C8.69 6 6 8.69 6 12S8.69 18 12 18 18 15.31 18 12C18 8.68 15.31 6 12 6M20 13H23V11H20M17.24 18.71L19.04 20.5L20.45 19.09L18.66 17.29M20.45 5L19.04 3.6L17.24 5.39L18.66 6.81M13 1H11V4H13M6.76 5.39L4.96 3.6L3.55 5L5.34 6.81L6.76 5.39M1 13H4V11H1M13 20H11V23H13" />
-            </svg>
+            <div class="mode-tog">
+                <svg class="mode" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <title>white-balance-sunny</title>
+                    <path d="M3.55 19.09L4.96 20.5L6.76 18.71L5.34 17.29M12 6C8.69 6 6 8.69 6 12S8.69 18 12 18 18 15.31 18 12C18 8.68 15.31 6 12 6M20 13H23V11H20M17.24 18.71L19.04 20.5L20.45 19.09L18.66 17.29M20.45 5L19.04 3.6L17.24 5.39L18.66 6.81M13 1H11V4H13M6.76 5.39L4.96 3.6L3.55 5L5.34 6.81L6.76 5.39M1 13H4V11H1M13 20H11V23H13" />
+                </svg>
+            </div>
         </div>
         <div class="main-inner">
             <div class="main-inner-upper">
                 <h1 class="title">Inbox</h1>
             </div>
-            <div class="to-do-container">
+            <div class="tasks-container">
             </div>
             <div class="add-to-do-container">
                 <div class="add-to-do">
@@ -221,6 +230,76 @@ export default class UI {
         </div>
         `;
         document.body.appendChild(main);
+        UI.initMainButtons();
+    }
+
+    static initMainButtons() {
+        const addTask = document.querySelector('.add-to-do');
+        const toggleMode = document.querySelector('.mode-tog');
+
+        addTask.addEventListener('click', UI.addTask);
+        toggleMode.addEventListener('click', UI.mode)
+    }
+
+    static removeProject() {
+        document.querySelector('.title').innerHTML = '';
+        document.querySelector('.tasks-container').innerHTML = '';
+    }
+
+    static openProject(Tab) {
+        document.querySelector('.title').innerHTML = Tab.id;
+        document.querySelector('.tasks-container').innerHTML = '';
+    }
+
+    static mode() {
+        const root = document.documentElement;
+        const newTheme = root.className === 'dark' ? 'light' : 'dark';
+        root.className = newTheme;
+
+        const icon = document.querySelector('.mode-tog')
+        if (newTheme === 'dark') {
+            icon.innerHTML = '<svg class="mode" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>moon-full</title><path d="M12 2A10 10 0 1 1 2 12A10 10 0 0 1 12 2Z" /></svg>'
+        } else {
+            icon.innerHTML = '<svg class="mode" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>white-balance-sunny</title><path d="M3.55 19.09L4.96 20.5L6.76 18.71L5.34 17.29M12 6C8.69 6 6 8.69 6 12S8.69 18 12 18 18 15.31 18 12C18 8.68 15.31 6 12 6M20 13H23V11H20M17.24 18.71L19.04 20.5L20.45 19.09L18.66 17.29M20.45 5L19.04 3.6L17.24 5.39L18.66 6.81M13 1H11V4H13M6.76 5.39L4.96 3.6L3.55 5L5.34 6.81L6.76 5.39M1 13H4V11H1M13 20H11V23H13" /></svg>';
+        }
+    }
+
+    static addTask() {
+        const task = document.createElement('div');
+        task.classList.add('task');
+        task.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <title>checkbox-blank-outline</title>
+            <path d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,5V19H5V5H19Z" />
+        </svg>
+        <h3 class="ind-task">New Task</h3>`;
+        document.querySelector('.tasks-container').appendChild(task);
+        document.querySelector('.ind-task');
+
+        UI.nameTask(task)
+    }
+
+    static nameTask(task) {
+        const textbox = task.lastElementChild;
+        
+        const inputField = document.createElement('input');
+        inputField.type = 'text';
+        inputField.classList.add('name-task');
+        if (textbox.innerHTML !== 'New Task') {
+            inputField.value = textbox.innerHTML;
+        };
+
+        textbox.parentNode.replaceChild(inputField, textbox);
+
+        inputField.focus();
+
+        inputField.addEventListener('blur', function() {
+            if (inputField.value === '') {
+                inputField.value = 'New Task';
+            } 
+        textbox.innerHTML = inputField.value;
+        inputField.parentNode.replaceChild(textbox, inputField);
+        });
     }
 
 }
