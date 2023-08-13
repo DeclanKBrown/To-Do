@@ -283,6 +283,7 @@ main {
 
 .ind-task {
     color: var(--side-sec-text-col);
+    cursor: text;
 }
 
 .title {

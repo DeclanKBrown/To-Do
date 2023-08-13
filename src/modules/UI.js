@@ -268,13 +268,14 @@ export default class UI {
         const task = document.createElement('div');
         task.classList.add('task');
         task.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <title>checkbox-blank-outline</title>
-            <path d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,5V19H5V5H19Z" />
-        </svg>
+        <div class="check-box unchecked">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <title>checkbox-blank-outline</title>
+                <path d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,5V19H5V5H19Z" />
+            </svg>
+        </div>
         <h3 class="ind-task">New Task</h3>`;
         document.querySelector('.tasks-container').appendChild(task);
-        document.querySelector('.ind-task');
 
         UI.nameTask(task)
     }
@@ -282,24 +283,46 @@ export default class UI {
     static nameTask(task) {
         const textbox = task.lastElementChild;
         
-        const inputField = document.createElement('input');
-        inputField.type = 'text';
-        inputField.classList.add('name-task');
-        if (textbox.innerHTML !== 'New Task') {
-            inputField.value = textbox.innerHTML;
-        };
+        if (!textbox.classList.contains('name-task')) {
+            UI.initTask(task);
 
-        textbox.parentNode.replaceChild(inputField, textbox);
+            const inputField = document.createElement('input');
+            inputField.type = 'text';
+            inputField.classList.add('name-task');
+            if (textbox.innerHTML !== 'New Task') {
+                inputField.value = textbox.innerHTML;
+            };
 
-        inputField.focus();
+            textbox.parentNode.replaceChild(inputField, textbox);
 
-        inputField.addEventListener('blur', function() {
-            if (inputField.value === '') {
-                inputField.value = 'New Task';
-            } 
-        textbox.innerHTML = inputField.value;
-        inputField.parentNode.replaceChild(textbox, inputField);
-        });
+            inputField.focus();
+
+            inputField.addEventListener('blur', function() {
+                if (inputField.value === '') {
+                    inputField.value = 'New Task';
+                } 
+            textbox.innerHTML = inputField.value;
+            task.replaceChild(textbox, inputField);
+            });
+        }
+    }
+
+    static initTask(task) {
+        task.lastElementChild.addEventListener('click', () => UI.nameTask(task));
+        task.firstElementChild.addEventListener('click', () => UI.checkTask(task))
+    }
+
+    static checkTask(task) {
+        const checked = document.createElement('div');
+        checked.classList.add('checked')
+        checked.classList.add('check-box')
+        checked.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>checkbox-intermediate</title><path d="M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V5H19V19M17,17H7V7H17V17Z" /></svg>'
+
+        task.firstElementChild.replaceChild(checked, task.firstElementChild.firstElementChild)
+
+        task.lastElementChild.style.textDecoration = 'line-through';
+
+        setTimeout(() => { task.remove() }, 250)
     }
 
 }
