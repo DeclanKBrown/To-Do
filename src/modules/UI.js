@@ -1,4 +1,6 @@
-import task from './task.js'
+import TODO from './todo.js'
+import Project from './project.js'
+import Storage from './storage.js'
 
 export default class UI {
 
@@ -148,7 +150,10 @@ export default class UI {
     
     static delProj(proj) {
         proj.parentNode.children[1].style.textDecoration = 'line-through';
+        const name = proj.parentNode.id;
         setTimeout(() => { proj.parentNode.remove() }, 250); 
+
+        Storage.deleteProject(name); //Modules
     }
 
 
@@ -173,8 +178,10 @@ export default class UI {
         </div>`;
     document.querySelector('.projects-container').appendChild(proj);
 
+    Storage.addProject(new Project('New Project')); //Modules
+
     UI.initProject();
-    UI.openProject(proj.firstElementChild);
+    UI.openProject(proj.firstElementChild); 
     }
 
 
@@ -195,6 +202,7 @@ export default class UI {
     static renameProject(input) {
         if (input.parentNode.classList.contains('side-tab-sel')) {
             const inputField = document.createElement('input');
+
             inputField.type = 'text';
             inputField.classList.add('name-proj');
             if (input.innerHTML !== 'New Project') {
@@ -205,14 +213,16 @@ export default class UI {
 
             inputField.focus();
           
-            // Handle blur event to restore the span when clicking outside the input
             inputField.addEventListener('blur', function() {
                 if (inputField.value === '') {
                     inputField.value = 'New Project';
                     inputField.parentNode.id = 'New Project'
                 } else {
-                    inputField.parentNode.id = inputField.value
+                    inputField.parentNode.id = inputField.value;
                 }
+
+            Storage.renameProject(input.innerHTML, inputField.value); //Modules 
+
             input.innerHTML = inputField.value;
             document.querySelector('.title').innerHTML = inputField.value;
             inputField.parentNode.replaceChild(input, inputField);
@@ -311,13 +321,11 @@ export default class UI {
         <h3 class="ind-task">New Task</h3>`;
         document.querySelector('.tasks-container').appendChild(taskDOM);
 
-        // let task = new Task('New Task');
-
-        UI.nameTask(taskDOM);
+        UI.nameTask(taskDOM, todo);
     }
 
 
-    static nameTask(taskDOM) {
+    static nameTask(taskDOM, todo) {
         const textbox = taskDOM.lastElementChild;
         
         if (!textbox.classList.contains('name-task')) {
@@ -339,6 +347,8 @@ export default class UI {
                     inputField.value = 'New Task';
                 } 
             textbox.innerHTML = inputField.value;
+            taskDOM.id = inputField.value;
+            todo.setName(inputField.value);
             taskDOM.replaceChild(textbox, inputField);
             });
         }

@@ -132,6 +132,7 @@ aside {
 .side-tab-sel {
     background-color: var(--sel-col);
     border-radius: 0.3rem;
+    transition: all 0.15s;
 }
 
 .side-tab svg {

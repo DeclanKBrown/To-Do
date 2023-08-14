@@ -1,4 +1,4 @@
-export default class Task {
+export default class TODO {
 
     constructor(name) {
         this.name = name;
