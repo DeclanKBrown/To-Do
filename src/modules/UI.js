@@ -1,8 +1,13 @@
+import task from './task.js'
+
 export default class UI {
+
+
     static loadHome() {
         UI.sidebar();
         UI.main();
     }
+
 
     static sidebar() {
         const aside = document.createElement('aside');
@@ -97,6 +102,7 @@ export default class UI {
     UI.initButtons();
     }
 
+
     static initButtons() {
         const hamMenu = document.querySelector('.toggler');
         const tabs = document.querySelectorAll('.side-tab');
@@ -106,6 +112,7 @@ export default class UI {
         tabs.forEach((tab) => tab.addEventListener('click', () => UI.tab(tab)));
         addBtn.addEventListener('click', UI.addProject);
     }
+
 
     static toggleMenu() {
         const aside = document.querySelector('aside');
@@ -119,21 +126,31 @@ export default class UI {
         }
     }
 
+
     static tab(e) {
         UI.removeTabStyle();
         UI.tabStyle(e);
-        UI.removeProject();
+        UI.removeTab();
         UI.openProject(e);
     }
+
 
     static removeTabStyle() {
         const tabs = document.querySelectorAll('.side-tab');
         tabs.forEach((tab) => tab.classList.remove('side-tab-sel'));
     }
 
+
     static tabStyle(e) {
         e.classList.add('side-tab-sel');
     }
+
+    
+    static delProj(proj) {
+        proj.parentNode.children[1].style.textDecoration = 'line-through';
+        setTimeout(() => { proj.parentNode.remove() }, 250); 
+    }
+
 
     static addProject() {
         const proj = document.createElement('div');
@@ -147,12 +164,19 @@ export default class UI {
                 </svg>
             </span>
             <span class="project-name">New Project</span>
+            <div class="del">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <title>delete-circle</title>
+                    <path d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M17,7H14.5L13.5,6H10.5L9.5,7H7V9H17V7M9,18H15A1,1 0 0,0 16,17V10H8V17A1,1 0 0,0 9,18Z" />
+                </svg>
+            </div>
         </div>`;
     document.querySelector('.projects-container').appendChild(proj);
 
     UI.initProject();
     UI.openProject(proj.firstElementChild);
     }
+
 
     static initProject() {
         const project = document.querySelectorAll('.new-project')[document.querySelectorAll('.new-project').length - 1];
@@ -161,8 +185,12 @@ export default class UI {
         project.classList.add('side-tab-sel');
 
         const text = document.querySelectorAll('.project-name')[document.querySelectorAll('.project-name').length - 1];
-        text.addEventListener('click', () => UI.renameProject(text))
+        text.addEventListener('click', () => UI.renameProject(text));
+
+        const del = document.querySelectorAll('.del')[document.querySelectorAll('.del').length - 1];
+        del.addEventListener('click', () => UI.delProj(del));
     }
+
 
     static renameProject(input) {
         if (input.parentNode.classList.contains('side-tab-sel')) {
@@ -191,6 +219,7 @@ export default class UI {
             });
         }
     }
+
 
     static main() {
         const main = document.createElement('main');
@@ -233,6 +262,7 @@ export default class UI {
         UI.initMainButtons();
     }
 
+
     static initMainButtons() {
         const addTask = document.querySelector('.add-to-do');
         const toggleMode = document.querySelector('.mode-tog');
@@ -241,15 +271,18 @@ export default class UI {
         toggleMode.addEventListener('click', UI.mode)
     }
 
-    static removeProject() {
+
+    static removeTab() {
         document.querySelector('.title').innerHTML = '';
         document.querySelector('.tasks-container').innerHTML = '';
     }
+
 
     static openProject(Tab) {
         document.querySelector('.title').innerHTML = Tab.id;
         document.querySelector('.tasks-container').innerHTML = '';
     }
+
 
     static mode() {
         const root = document.documentElement;
@@ -264,10 +297,11 @@ export default class UI {
         }
     }
 
+
     static addTask() {
-        const task = document.createElement('div');
-        task.classList.add('task');
-        task.innerHTML = `
+        const taskDOM = document.createElement('div');
+        taskDOM.classList.add('task');
+        taskDOM.innerHTML = `
         <div class="check-box unchecked">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <title>checkbox-blank-outline</title>
@@ -275,16 +309,19 @@ export default class UI {
             </svg>
         </div>
         <h3 class="ind-task">New Task</h3>`;
-        document.querySelector('.tasks-container').appendChild(task);
+        document.querySelector('.tasks-container').appendChild(taskDOM);
 
-        UI.nameTask(task)
+        // let task = new Task('New Task');
+
+        UI.nameTask(taskDOM);
     }
 
-    static nameTask(task) {
-        const textbox = task.lastElementChild;
+
+    static nameTask(taskDOM) {
+        const textbox = taskDOM.lastElementChild;
         
         if (!textbox.classList.contains('name-task')) {
-            UI.initTask(task);
+            UI.initTask(taskDOM);
 
             const inputField = document.createElement('input');
             inputField.type = 'text';
@@ -302,15 +339,17 @@ export default class UI {
                     inputField.value = 'New Task';
                 } 
             textbox.innerHTML = inputField.value;
-            task.replaceChild(textbox, inputField);
+            taskDOM.replaceChild(textbox, inputField);
             });
         }
     }
+
 
     static initTask(task) {
         task.lastElementChild.addEventListener('click', () => UI.nameTask(task));
         task.firstElementChild.addEventListener('click', () => UI.checkTask(task))
     }
+
 
     static checkTask(task) {
         const checked = document.createElement('div');

@@ -317,4 +317,10 @@ main {
     fill: var(--side-text-col);
 }
 
+.new-project {
+    grid-template-columns: 25px 1fr 20px;
+    padding-right: 0.2rem;
+}
+
+
 
