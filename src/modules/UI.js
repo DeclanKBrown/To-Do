@@ -14,7 +14,7 @@ export default class UI {
 
         const now = new Date();
         const formattedDate = format(now, 'dd/MM/yyyy');
-        console.log(formattedDate);
+        console.log(now);
     }
 
 
