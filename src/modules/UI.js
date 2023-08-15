@@ -321,11 +321,14 @@ export default class UI {
         <h3 class="ind-task">New Task</h3>`;
         document.querySelector('.tasks-container').appendChild(taskDOM);
 
-        UI.nameTask(taskDOM, todo);
+        const projName = document.querySelector('.title').innerHTML;
+        Storage.addTask(new TODO('New Task'), projName); //Modules
+
+        UI.nameTask(taskDOM);
     }
 
 
-    static nameTask(taskDOM, todo) {
+    static nameTask(taskDOM) {
         const textbox = taskDOM.lastElementChild;
         
         if (!textbox.classList.contains('name-task')) {
@@ -346,10 +349,14 @@ export default class UI {
                 if (inputField.value === '') {
                     inputField.value = 'New Task';
                 } 
-            textbox.innerHTML = inputField.value;
-            taskDOM.id = inputField.value;
-            todo.setName(inputField.value);
-            taskDOM.replaceChild(textbox, inputField);
+
+                const projName = document.querySelector('.title').innerHTML;
+                Storage.renameTask(textbox.innerHTML, inputField.value, projName); // Modules
+
+                textbox.innerHTML = inputField.value;
+                taskDOM.id = inputField.value;
+        
+                taskDOM.replaceChild(textbox, inputField);
             });
         }
     }
@@ -362,6 +369,8 @@ export default class UI {
 
 
     static checkTask(task) {
+        const name = task.id;
+
         const checked = document.createElement('div');
         checked.classList.add('checked')
         checked.classList.add('check-box')
@@ -372,6 +381,9 @@ export default class UI {
         task.lastElementChild.style.textDecoration = 'line-through';
 
         setTimeout(() => { task.remove() }, 250)
+
+        const projName = document.querySelector('.title').innerHTML;
+        Storage.deleteTask(name, projName)
     }
 
 }

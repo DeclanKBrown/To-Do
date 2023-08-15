@@ -12,7 +12,7 @@ export default class Storage {
 
         todoList.setProjects(todoList.getProjects().map((project) => Object.assign(new Project(), project)))
 
-        todoList.getProjects().forEach((project) => project.setTasks(project.getTasks().map((task) => Object.assign(new Task(), task))))
+        todoList.getProjects().forEach((project) => project.setTasks(project.getTasks().map((todo) => Object.assign(new TODO(), todo))))
 
         return todoList
     }
