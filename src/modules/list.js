@@ -18,12 +18,9 @@ export default class List {
         return this.projects;
     }
 
+
     addProject(newProject) {
         this.projects.push(newProject);
-    }
-
-    findProject(name) {
-        return this.projects.find((project) => project.getName() == name);
     }
 
     deleteProject(targetName) {
@@ -38,9 +35,22 @@ export default class List {
         proj.setName(newName);
     }
 
-    Print() {
-        for (const project of this.projects) {
-            console.log(project.getName());
-        }
+
+    addTask(task, projName) {
+        const proj = this.projects.find((project) => project.getName() == projName);
+
+        proj.addTask(task)
+    }
+
+    renameTask(name, newName, projName) {
+        const proj = this.projects.find((project) => project.getName() == projName);
+
+        proj.renameTask(name, newName)
+    }
+
+    deleteTask(task, projName) {
+        const proj = this.projects.find((project) => project.getName() == projName);
+
+        proj.deleteTask(task)
     }
 }

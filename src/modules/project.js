@@ -20,5 +20,20 @@ export default class Project {
         return this.tasks;
     }
 
+    addTask(task) {
+        this.tasks.push(task)
+    }
+
+    renameTask(name, newName) {
+        const TODO = this.tasks.find((task) => task.getName() == name);
+        TODO.setName(newName);
+    }
+
+    deleteTask(name) {
+        const TODO = this.tasks.find((task) => task.getName() == name);
+
+        this.tasks.splice(this.tasks.indexOf(TODO), 1);
+    }
+
 
 }
