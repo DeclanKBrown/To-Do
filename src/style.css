@@ -65,10 +65,6 @@ aside {
     transition: all 0.15s;
 }
 
-.aside-closed {
-    grid-column: 1 / 2;
-}
-
 .aside-upper-cont {
     width: 100%;
     display: grid;
@@ -76,27 +72,6 @@ aside {
     border-bottom: 1px solid var(--ol-col);
     transition: all 0.15s;
     margin-bottom: 1rem;
-}
-
-.aside-upper-inner {
-    width: 80%;
-    grid-row: 1 / 2;
-    display: grid;
-    grid-template-columns: 35px 1fr 35px;
-    align-content: center;
-}
-
-.menu-tog {
-    cursor: pointer;
-    grid-column: 3 / 4;
-}
-
-.toggler {
-    fill: var(--side-text-col);
-}
-
-.menu-tog-closed {
-    grid-column: 1 / 2;
 }
 
 .aside-inner {
