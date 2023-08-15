@@ -8,6 +8,23 @@ export default class UI {
     static loadHome() {
         UI.sidebar();
         UI.main();
+        UI.loadProjects();
+
+    }
+
+
+    static loadProjects() {
+        Storage.getTodoList().getProjects().forEach((project) => {
+            if (
+                project.getName() !== 'Inbox' &&
+                project.getName() !== 'Today' &&
+                project.getName() !== 'Week' &&
+                project.getName() !== 'Month' &&
+                project.getName() !== 'Anytime'
+            ) {
+                UI.addProject(project.getName());
+            }
+        });
     }
 
 
@@ -112,7 +129,7 @@ export default class UI {
 
         hamMenu.addEventListener('click', UI.toggleMenu);
         tabs.forEach((tab) => tab.addEventListener('click', () => UI.tab(tab)));
-        addBtn.addEventListener('click', UI.addProject);
+        addBtn.addEventListener('click', () => UI.addProject('New Project'));
     }
 
 
@@ -157,18 +174,19 @@ export default class UI {
     }
 
 
-    static addProject() {
+    static addProject(projName) {
+        console.log(projName)
         const proj = document.createElement('div');
         proj.id = 'projectsCont';
         proj.innerHTML = `
-        <div class="side-tab new-project" id="New Project">
+        <div class="side-tab new-project" id="${projName}">
             <span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <title>timelapse</title>
                     <path d="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M16.24,7.76C15.07,6.58 13.53,6 12,6V12L7.76,16.24C10.1,18.58 13.9,18.58 16.24,16.24C18.59,13.9 18.59,10.1 16.24,7.76Z" />
                 </svg>
             </span>
-            <span class="project-name">New Project</span>
+            <span class="project-name">${projName}</span>
             <div class="del">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <title>delete-circle</title>
@@ -178,18 +196,23 @@ export default class UI {
         </div>`;
     document.querySelector('.projects-container').appendChild(proj);
 
-    Storage.addProject(new Project('New Project')); //Modules
+    
+    UI.initProject(projName);
 
-    UI.initProject();
-    UI.openProject(proj.firstElementChild); 
+    if(projName == 'New Project') {
+        Storage.addProject(new Project('New Project')); //Modules
+        UI.openProject(proj.firstElementChild); 
+    }
     }
 
 
-    static initProject() {
+    static initProject(projName) {
         const project = document.querySelectorAll('.new-project')[document.querySelectorAll('.new-project').length - 1];
         project.addEventListener('click', () => UI.tab(project));
 
-        project.classList.add('side-tab-sel');
+        if (projName == 'New Project') {
+            project.classList.add('side-tab-sel');
+        }
 
         const text = document.querySelectorAll('.project-name')[document.querySelectorAll('.project-name').length - 1];
         text.addEventListener('click', () => UI.renameProject(text));
@@ -277,7 +300,7 @@ export default class UI {
         const addTask = document.querySelector('.add-to-do');
         const toggleMode = document.querySelector('.mode-tog');
 
-        addTask.addEventListener('click', UI.addTask);
+        addTask.addEventListener('click', () => UI.addTask('New Task'));
         toggleMode.addEventListener('click', UI.mode)
     }
 
@@ -290,7 +313,11 @@ export default class UI {
 
     static openProject(Tab) {
         document.querySelector('.title').innerHTML = Tab.id;
-        document.querySelector('.tasks-container').innerHTML = '';
+        
+        const proj = Storage.getTodoList().getProjects().find((project) => project.getName() === Tab.id);
+        if (proj !== undefined) {
+            proj.getTasks().forEach((task) => UI.addTask(task.getName()));
+        }
     }
 
 
@@ -308,8 +335,9 @@ export default class UI {
     }
 
 
-    static addTask() {
+    static addTask(name) {
         const taskDOM = document.createElement('div');
+        taskDOM.id = name;
         taskDOM.classList.add('task');
         taskDOM.innerHTML = `
         <div class="check-box unchecked">
@@ -318,13 +346,15 @@ export default class UI {
                 <path d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,5V19H5V5H19Z" />
             </svg>
         </div>
-        <h3 class="ind-task">New Task</h3>`;
+        <h3 class="ind-task">${name}</h3>`;
         document.querySelector('.tasks-container').appendChild(taskDOM);
 
-        const projName = document.querySelector('.title').innerHTML;
-        Storage.addTask(new TODO('New Task'), projName); //Modules
-
-        UI.nameTask(taskDOM);
+        if (name == 'New Task') {
+            const projName = document.querySelector('.title').innerHTML;
+            Storage.addTask(new TODO('New Task'), projName); //Modules
+    
+            UI.nameTask(taskDOM);
+        }
     }
 
 

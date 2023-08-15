@@ -5,9 +5,10 @@ export default class List {
     constructor() {
         this.projects = [];
         this.projects.push(new Project('Inbox'));
-        this.projects.push(new Project('Today'))
-        this.projects.push(new Project('Week'))
-        this.projects.push(new Project('Month'))
+        this.projects.push(new Project('Today'));
+        this.projects.push(new Project('Week'));
+        this.projects.push(new Project('Month'));
+        this.projects.push(new Project('Anytime'));
     }
 
     setProjects(projects) {
