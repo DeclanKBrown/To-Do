@@ -147,6 +147,7 @@ export default class UI {
 
 
     static tab(e) {
+        console.log(e)
         UI.removeTabStyle();
         UI.tabStyle(e);
         UI.removeTab();
@@ -168,14 +169,19 @@ export default class UI {
     static delProj(proj) {
         proj.parentNode.children[1].style.textDecoration = 'line-through';
         const name = proj.parentNode.id;
-        setTimeout(() => { proj.parentNode.remove() }, 250); 
+
+        
+        setTimeout(() => {
+            proj.parentNode.remove(); 
+            UI.tab(document.getElementById('Inbox'));
+        }, 250); 
+
 
         Storage.deleteProject(name); //Modules
     }
 
 
     static addProject(projName) {
-        console.log(projName)
         const proj = document.createElement('div');
         proj.id = 'projectsCont';
         proj.innerHTML = `
