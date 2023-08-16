@@ -18,6 +18,7 @@
     --side-sec-text-col: #606468;
     --sel-col: #DBDEE1;
     --main-text-col: #0B0D11;
+    --input-col: rgba(195, 199, 202, 0.7);
 }
 
 :root.light {
@@ -28,6 +29,7 @@
     --side-sec-text-col: #606468;
     --sel-col: #DBDEE1;
     --main-text-col: #0B0D11;
+    --input-col: rgba(195, 199, 202, 0.7);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -39,6 +41,7 @@
         --side-sec-text-col: #a8a8a8;
         --sel-col: #2e2e2e;
         --main-text-col: #f5f5f5;
+        --input-col: rgba(84, 84, 84, 0.7);
     }
 }
 
@@ -223,9 +226,13 @@ main {
     border-radius: 0.3rem;
 }
 
+.check-box {
+    padding-top: 0.3rem;
+}
+
 .task {
     display: grid;
-    grid-template-columns: 22px auto;
+    grid-template-columns: 22px auto 10rem;
     align-items: center;
     gap: 0.5rem;
     margin-top: 1.5rem;
@@ -233,6 +240,7 @@ main {
     user-select: none;
     color: var(--main-text-col);
     padding: 0.2rem 0;
+    padding-right: 1rem;
 }
 
 .task svg {
@@ -297,6 +305,13 @@ main {
     grid-template-columns: 25px 1fr 20px;
     padding-right: 0.2rem;
 }
+
+.date-span {
+    justify-self: end;
+}
+
+
+
 
 
 

@@ -10,11 +10,7 @@ export default class UI {
         UI.sidebar();
         UI.main();
         UI.loadProjects();
-        UI.openProject(document.querySelector('#Inbox'))
-
-        const now = new Date();
-        const formattedDate = format(now, 'dd/MM/yyyy');
-        console.log(now);
+        UI.openProject(document.querySelector('#Inbox'), true)
     }
 
 
@@ -27,7 +23,7 @@ export default class UI {
                 project.getName() !== 'Month' &&
                 project.getName() !== 'Anytime'
             ) {
-                UI.addProject(project.getName());
+                UI.addProject(project.getName(), true);
             }
         });
     }
@@ -156,7 +152,7 @@ export default class UI {
     }
 
 
-    static addProject(projName) {
+    static addProject(projName, pageLoad = false) {
         const proj = document.createElement('div');
         proj.id = 'projectsCont';
         proj.innerHTML = `
@@ -176,20 +172,20 @@ export default class UI {
     document.querySelector('.projects-container').appendChild(proj);
 
     
-    UI.initProject(projName);
+    UI.initProject(projName, pageLoad);
 
-    if(projName == 'New Project') {
+    if(projName == 'New Project' && !pageLoad) {
         Storage.addProject(new Project('New Project')); //Modules
         UI.openProject(proj.firstElementChild); 
     }
     }
 
 
-    static initProject(projName) {
+    static initProject(projName, pageLoad = false) {
         const project = document.querySelectorAll('.new-project')[document.querySelectorAll('.new-project').length - 1];
         project.addEventListener('click', () => UI.tab(project));
 
-        if (projName == 'New Project') {
+        if (projName == 'New Project' && !pageLoad) {
             project.classList.add('side-tab-sel');
         }
 
@@ -287,12 +283,12 @@ export default class UI {
     }
 
 
-    static openProject(Tab) {
+    static openProject(Tab, pageLoad = false) {
         document.querySelector('.title').innerHTML = Tab.id;
         
         const proj = Storage.getTodoList().getProjects().find((project) => project.getName() === Tab.id);
         if (proj !== undefined) {
-            proj.getTasks().forEach((task) => UI.addTask(task.getName()));
+            proj.getTasks().forEach((task) => UI.addTask(task.getName(), pageLoad));
         }
     }
 
@@ -311,7 +307,7 @@ export default class UI {
     }
 
 
-    static addTask(name) {
+    static addTask(name, pageLoad) {
         const taskDOM = document.createElement('div');
         taskDOM.id = name;
         taskDOM.classList.add('task');
@@ -321,12 +317,13 @@ export default class UI {
                 <path d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,5V19H5V5H19Z" />
             </svg>
         </div>
-        <h3 class="ind-task">${name}</h3>`;
+        <h3 class="ind-task">${name}</h3>
+        <span class="date-span">No Date</span>`;
         document.querySelector('.tasks-container').appendChild(taskDOM);
 
         UI.initTask(taskDOM);
 
-        if (name == 'New Task') {
+        if (name == 'New Task' && !pageLoad) {
             const projName = document.querySelector('.title').innerHTML;
             Storage.addTask(new TODO('New Task'), projName); //Modules
     
@@ -336,7 +333,7 @@ export default class UI {
 
 
     static nameTask(taskDOM) {
-        const textbox = taskDOM.lastElementChild;
+        const textbox = taskDOM.children[1];
         
         if (!textbox.classList.contains('name-task')) {
 
@@ -369,9 +366,39 @@ export default class UI {
 
 
     static initTask(task) {
-        task.lastElementChild.addEventListener('click', () => UI.nameTask(task));
+        task.children[1].addEventListener('click', () => UI.nameTask(task));
         task.firstElementChild.addEventListener('click', () => UI.checkTask(task))
+        task.lastElementChild.addEventListener('click', () => UI.dateTask(task))
     }
+
+    static dateTask(taskDOM) {
+        const dateSpan = taskDOM.lastElemeentChild;
+        
+        const inputField = document.createElement('input');
+        inputField.type = 'date';
+        inputField.classList.add('date-task');
+        if (dateSpan.innerHTML !== 'No Date') {
+            inputField.value = dateSpan.innerHTML;
+        };
+
+        dateSpan.parentNode.replaceChild(inputField, dateSpan);
+
+        inputField.focus();
+
+        inputField.addEventListener('blur', function() {
+            if (inputField.value === '') {
+                inputField.value = 'No Date';
+            } 
+
+            const projName = document.querySelector('.title').innerHTML;
+            // Storage.dateTask(textbox.innerHTML, inputField.value, projName); // Modules
+
+            dateSpan.innerHTML = inputField.value;
+            taskDOM.id = inputField.value;
+    
+            taskDOM.replaceChild(textbox, inputField);
+        });
+    } 
 
 
     static checkTask(task) {
@@ -384,7 +411,7 @@ export default class UI {
 
         task.firstElementChild.replaceChild(checked, task.firstElementChild.firstElementChild)
 
-        task.lastElementChild.style.textDecoration = 'line-through';
+        task.children[1].style.textDecoration = 'line-through';
 
         setTimeout(() => { task.remove() }, 250)
 
