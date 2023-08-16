@@ -183,6 +183,11 @@ main {
     transition: all 0.15s;
 }
 
+.tasks-container {
+    max-height: 70vh;
+    overflow-y: scroll;
+}
+
 .main-upper {
     border-bottom: 1px solid var(--ol-col);
     transition: all 0.15s;
@@ -202,6 +207,8 @@ main {
 
 .main-inner {
     width: 60%;
+    height: 95%;
+    /* overflow-y: scroll; */
     justify-self: center;
     grid-row: 2 / 3;
 }
@@ -308,6 +315,10 @@ main {
 
 .date-span {
     justify-self: end;
+}
+
+.input-error {
+    color: red;
 }
 
 

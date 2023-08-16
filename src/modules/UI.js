@@ -118,11 +118,10 @@ export default class UI {
 
 
     static tab(e) {
-        console.log(e)
         UI.removeTabStyle();
         UI.tabStyle(e);
         UI.removeTab();
-        UI.openProject(e);
+        UI.openProject(e, true);
     }
 
 
@@ -210,8 +209,11 @@ export default class UI {
             input.parentNode.replaceChild(inputField, input);
 
             inputField.focus();
-          
-            inputField.addEventListener('blur', function() {
+
+            inputField.addEventListener('input', () => UI.checkName(inputField));
+
+            inputField.addEventListener('blur', () => { 
+                
                 if (inputField.value === '') {
                     inputField.value = 'New Project';
                     inputField.parentNode.id = 'New Project'
@@ -219,13 +221,32 @@ export default class UI {
                     inputField.parentNode.id = inputField.value;
                 }
 
-            Storage.renameProject(input.innerHTML, inputField.value); //Modules 
+                
+                Storage.renameProject(input.innerHTML, inputField.value); //Modules 
 
-            input.innerHTML = inputField.value;
-            document.querySelector('.title').innerHTML = inputField.value;
-            inputField.parentNode.replaceChild(input, inputField);
+                input.innerHTML = inputField.value;
+                document.querySelector('.title').innerHTML = inputField.value;
+                inputField.parentNode.replaceChild(input, inputField);
+                UI.checkName(inputField, input)
             });
         }
+    }
+
+    static checkName(inputField, input) {
+        const list = Storage.getTodoList();
+        list.getProjects().forEach((proj) => {
+            if (proj.getName() == inputField.value) {
+                console.log(inputField);
+                inputField.classList.add('input-error');
+                if (input != undefined) {
+                    console.log(input.parentNode)
+                    input.classList.add('input-error');
+                    UI.delProj(input.parentNode.children[2])
+                }
+            } else {
+                inputField.classList.remove('input-error');
+            }
+        });
     }
 
 
@@ -372,7 +393,7 @@ export default class UI {
     }
 
     static dateTask(taskDOM) {
-        const dateSpan = taskDOM.lastElemeentChild;
+        const dateSpan = taskDOM.lastElementChild;
         
         const inputField = document.createElement('input');
         inputField.type = 'date';
@@ -396,7 +417,7 @@ export default class UI {
             dateSpan.innerHTML = inputField.value;
             taskDOM.id = inputField.value;
     
-            taskDOM.replaceChild(textbox, inputField);
+            taskDOM.replaceChild(dateSpan, inputField);
         });
     } 
 
