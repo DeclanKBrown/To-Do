@@ -136,18 +136,18 @@ export default class UI {
     }
 
     
-    static delProj(proj) {
+    static delProj(proj, sameName = false) {
         proj.parentNode.children[1].style.textDecoration = 'line-through';
         const name = proj.parentNode.id;
 
         
         setTimeout(() => {
-            proj.parentNode.remove(); 
+            proj.parentNode.parentNode.remove(); 
             UI.tab(document.getElementById('Inbox'));
         }, 250); 
 
 
-        Storage.deleteProject(name); //Modules
+        Storage.deleteProject(name, sameName); //Modules
     }
 
 
@@ -206,11 +206,14 @@ export default class UI {
                 inputField.value = input.innerHTML;
             };
 
+            const oldName = input.innerHTML
+
             input.parentNode.replaceChild(inputField, input);
 
             inputField.focus();
 
-            inputField.addEventListener('input', () => UI.checkName(inputField));
+            inputField.addEventListener('input', () => UI.checkProjName(inputField, inputField.value, oldName, false, false));
+
 
             inputField.addEventListener('blur', () => { 
                 
@@ -221,30 +224,39 @@ export default class UI {
                     inputField.parentNode.id = inputField.value;
                 }
 
+                const name = input.innerHTML;
                 
-                Storage.renameProject(input.innerHTML, inputField.value); //Modules 
 
+                Storage.renameProject(input.innerHTML, inputField.value); //Modules 
+                
                 input.innerHTML = inputField.value;
                 document.querySelector('.title').innerHTML = inputField.value;
                 inputField.parentNode.replaceChild(input, inputField);
-                UI.checkName(inputField, input)
+
+                UI.checkProjName(input, inputField.value, name, true, inputField.classList.contains('input-error'))
             });
         }
     }
 
-    static checkName(inputField, input) {
+
+    static checkProjName(projDOM, name, oldName, isBlur, okDel) {
         const list = Storage.getTodoList();
+        let isSame = false;
+
         list.getProjects().forEach((proj) => {
-            if (proj.getName() == inputField.value) {
-                console.log(inputField);
-                inputField.classList.add('input-error');
-                if (input != undefined) {
-                    console.log(input.parentNode)
-                    input.classList.add('input-error');
-                    UI.delProj(input.parentNode.children[2])
+            if (isBlur) {
+                if (okDel && proj.getName() == name) {
+                    projDOM.classList.add('input-error');
+                    UI.delProj(projDOM.parentNode.children[2], true);
                 }
             } else {
-                inputField.classList.remove('input-error');
+                if (proj.getName() == name && name != oldName) {
+                    isSame = true;
+                    projDOM.classList.add('input-error');
+                } else if (!isSame) {
+                    projDOM.classList.remove('input-error');
+                    isSame = false;
+                }
             }
         });
     }
@@ -369,6 +381,8 @@ export default class UI {
 
             inputField.focus();
 
+            inputField.addEventListener('input', () => UI.checkTaskName(inputField))
+
             inputField.addEventListener('blur', function() {
                 if (inputField.value === '') {
                     inputField.value = 'New Task';
@@ -381,8 +395,13 @@ export default class UI {
                 taskDOM.id = inputField.value;
         
                 taskDOM.replaceChild(textbox, inputField);
+                UI.checkTaskName(inputField)
             });
         }
+    }
+
+    static checkTaskName(inputField) {
+
     }
 
 

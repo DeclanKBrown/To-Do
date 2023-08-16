@@ -30,9 +30,9 @@ export default class Storage {
         Storage.saveTodoList(todoList);
     }
 
-    static deleteProject(name) {
+    static deleteProject(name, sameName) {
         const todoList = Storage.getTodoList();
-        todoList.deleteProject(name);
+        todoList.deleteProject(name, sameName);
         Storage.saveTodoList(todoList);
     }
 

@@ -24,10 +24,22 @@ export default class List {
         this.projects.push(newProject);
     }
 
-    deleteProject(targetName) {
-        const projectToDelete = this.projects.find((project) => project.getName() == targetName);
+    deleteProject(targetName, sameName) {
+        if (sameName) {
+            const indexToDelete = this.projects.findIndex((project) => project.getName() === targetName);
 
-        this.projects.splice(this.projects.indexOf(projectToDelete), 1);
+            if (indexToDelete !== -1) {
+                const secondIndexToDelete = this.projects.findIndex((project, index) => index !== indexToDelete && project.getName() === targetName);
+            
+                if (secondIndexToDelete !== -1) {
+                    this.projects.splice(secondIndexToDelete, 1);
+                }
+            }
+        } else {
+            const projectToDelete = this.projects.find((project) => project.getName() == targetName);
+    
+            this.projects.splice(this.projects.indexOf(projectToDelete), 1);
+        }
     }
 
     renameProject(name, newName) {
