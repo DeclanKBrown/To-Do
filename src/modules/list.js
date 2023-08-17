@@ -61,9 +61,9 @@ export default class List {
         proj.renameTask(name, newName)
     }
 
-    deleteTask(task, projName) {
+    deleteTask(task, projName, sameName) {
         const proj = this.projects.find((project) => project.getName() == projName);
 
-        proj.deleteTask(task)
+        proj.deleteTask(task, sameName)
     }
 }

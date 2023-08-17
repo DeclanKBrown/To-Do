@@ -206,13 +206,13 @@ export default class UI {
                 inputField.value = input.innerHTML;
             };
 
-            const oldName = input.innerHTML
+            const oldName = input.innerHTML.trim()
 
             input.parentNode.replaceChild(inputField, input);
 
             inputField.focus();
 
-            inputField.addEventListener('input', () => UI.checkProjName(inputField, inputField.value, oldName, false, false));
+            inputField.addEventListener('input', () => UI.checkProjName(inputField, inputField.value.trim(), oldName, false, false));
 
 
             inputField.addEventListener('blur', () => { 
@@ -221,19 +221,19 @@ export default class UI {
                     inputField.value = 'New Project';
                     inputField.parentNode.id = 'New Project'
                 } else {
-                    inputField.parentNode.id = inputField.value;
+                    inputField.parentNode.id = inputField.value.trim();
                 }
 
-                const name = input.innerHTML;
+                const name = input.innerHTML.trim();
                 
 
-                Storage.renameProject(input.innerHTML, inputField.value); //Modules 
+                Storage.renameProject(input.innerHTML.trim(), inputField.value.trim()); //Modules 
                 
-                input.innerHTML = inputField.value;
-                document.querySelector('.title').innerHTML = inputField.value;
+                input.innerHTML = inputField.value.trim();
+                document.querySelector('.title').innerHTML = inputField.value.trim();
                 inputField.parentNode.replaceChild(input, inputField);
 
-                UI.checkProjName(input, inputField.value, name, true, inputField.classList.contains('input-error'))
+                UI.checkProjName(input, inputField.value.trim(), name, true, inputField.classList.contains('input-error'))
             });
         }
     }
@@ -290,9 +290,11 @@ export default class UI {
         <div class="main-bottom">
             <div class="footer">
                 <span>Copyright © 2023 Declankb</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" />
-                </svg>
+                <a href="https://github.com/DeclanKBrown" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" />
+                    </svg>
+                </a>
             </div>
         </div>
         `;
@@ -377,37 +379,69 @@ export default class UI {
                 inputField.value = textbox.innerHTML;
             };
 
+            const oldName = textbox.innerHTML.trim() //
+            const projName = document.querySelector('.title').innerHTML //
+
             textbox.parentNode.replaceChild(inputField, textbox);
 
             inputField.focus();
 
-            inputField.addEventListener('input', () => UI.checkTaskName(inputField))
+            inputField.addEventListener('input', () => UI.checkTaskName(inputField, inputField.value.trim(), oldName, projName, false, false)) //
 
             inputField.addEventListener('blur', function() {
                 if (inputField.value === '') {
                     inputField.value = 'New Task';
                 } 
 
-                const projName = document.querySelector('.title').innerHTML;
-                Storage.renameTask(textbox.innerHTML, inputField.value, projName); // Modules
+                console.log(textbox.innerHTML)
+                console.log(inputField.value)
+                console.log(projName)
+                Storage.renameTask(textbox.innerHTML.trim(), inputField.value.trim(), projName); // Modules
 
-                textbox.innerHTML = inputField.value;
-                taskDOM.id = inputField.value;
+                const name = textbox.innerHTML.trim(); //
+
+                textbox.innerHTML = inputField.value.trim();
+                taskDOM.id = inputField.value.trim();
         
                 taskDOM.replaceChild(textbox, inputField);
-                UI.checkTaskName(inputField)
+
+                UI.checkTaskName(textbox, inputField.value.trim(), name, projName, true, inputField.classList.contains('input-error')) //
             });
         }
     }
 
-    static checkTaskName(inputField) {
+    static checkTaskName(inputField, name, oldName, projName, isBlur, okDel) {
+        const list = Storage.getTodoList();
+        let isSame = false;
 
+        list.getProjects().forEach((proj) => {
+            if (proj.getName() == projName) {
+                proj.getTasks().forEach(task => {
+                    if (isBlur) {
+                        if (okDel && task.getName() == name) {
+                            console.log(name)
+                            inputField.classList.add('input-error');
+                            UI.checkTask(inputField.parentNode, true); //fixme
+                            okDel = false;
+                        }
+                    } else {
+                        if (task.getName() == name && name != oldName) {
+                            isSame = true;
+                            inputField.classList.add('input-error');
+                        } else if (!isSame) {
+                            inputField.classList.remove('input-error');
+                            isSame = false;
+                        }
+                    }
+                })
+            }
+        });
     }
 
 
     static initTask(task) {
         task.children[1].addEventListener('click', () => UI.nameTask(task));
-        task.firstElementChild.addEventListener('click', () => UI.checkTask(task))
+        task.firstElementChild.addEventListener('click', () => UI.checkTask(task, false))
         task.lastElementChild.addEventListener('click', () => UI.dateTask(task))
     }
 
@@ -441,7 +475,7 @@ export default class UI {
     } 
 
 
-    static checkTask(task) {
+    static checkTask(task, sameName = false) {
         const name = task.id;
 
         const checked = document.createElement('div');
@@ -456,7 +490,7 @@ export default class UI {
         setTimeout(() => { task.remove() }, 250)
 
         const projName = document.querySelector('.title').innerHTML;
-        Storage.deleteTask(name, projName)
+        Storage.deleteTask(name, projName, sameName)
     }
 
 }

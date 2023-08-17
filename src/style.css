@@ -321,6 +321,10 @@ main {
     color: red;
 }
 
+.project-name {
+    user-select: none;
+}
+
 
 
 
