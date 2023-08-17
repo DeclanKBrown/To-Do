@@ -323,7 +323,7 @@ export default class UI {
         
         const proj = Storage.getTodoList().getProjects().find((project) => project.getName() === Tab.id);
         if (proj !== undefined) {
-            proj.getTasks().forEach((task) => UI.addTask(task.getName(), pageLoad));
+            proj.getTasks().forEach((task) => UI.addTask(task.getName(), task.getDate(), pageLoad));
         }
     }
 
@@ -342,7 +342,7 @@ export default class UI {
     }
 
 
-    static addTask(name, pageLoad) {
+    static addTask(name, date, pageLoad) {
         const taskDOM = document.createElement('div');
         taskDOM.id = name;
         taskDOM.classList.add('task');
@@ -353,7 +353,7 @@ export default class UI {
             </svg>
         </div>
         <h3 class="ind-task">${name}</h3>
-        <span class="date-span">No Date</span>`;
+        <span class="date-span">${date}</span>`;
         document.querySelector('.tasks-container').appendChild(taskDOM);
 
         UI.initTask(taskDOM);
@@ -445,6 +445,7 @@ export default class UI {
         task.lastElementChild.addEventListener('click', () => UI.dateTask(task))
     }
 
+
     static dateTask(taskDOM) {
         const dateSpan = taskDOM.lastElementChild;
         
@@ -464,11 +465,18 @@ export default class UI {
                 inputField.value = 'No Date';
             } 
 
+            //Formatting Date
+            const unformattedDate = inputField.value;
+            const formattedDate = unformattedDate.split('-')[2] + '-' + unformattedDate.split('-')[1] + '-' + unformattedDate.split('-')[0];
+            
             const projName = document.querySelector('.title').innerHTML;
-            // Storage.dateTask(textbox.innerHTML, inputField.value, projName); // Modules
+            const taskName = inputField.parentNode.children[1].innerHTML;
 
-            dateSpan.innerHTML = inputField.value;
-            taskDOM.id = inputField.value;
+            Storage.dateTask(formattedDate, taskName, projName); // Modules
+            
+
+            dateSpan.innerHTML = formattedDate;
+            taskDOM.id = formattedDate;
     
             taskDOM.replaceChild(dateSpan, inputField);
         });

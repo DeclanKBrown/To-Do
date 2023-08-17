@@ -1,7 +1,8 @@
 export default class TODO {
 
-    constructor(name) {
+    constructor(name, date = 'No Date') {
         this.name = name;
+        this.date= date;
     }
 
     setName(name) {
@@ -12,12 +13,12 @@ export default class TODO {
         return this.name;
     }
 
-    setDate(dueDate) {
-        this.dueDate = dueDate;
+    setDate(date) {
+        this.date = date;
     }
     
     getDate() {
-        return this.dueDate;
+        return this.date;
     }
 
 }

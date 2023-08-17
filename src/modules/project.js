@@ -29,6 +29,11 @@ export default class Project {
         TODO.setName(newName);
     }
 
+    dateTask(date, name) {
+        const TODO = this.tasks.find((task) => task.getName() == name);
+        TODO.setDate(date);
+    }
+
     deleteTask(name, sameName) {
         if (sameName) {
             const firstTODOIndex = this.tasks.findIndex((task) => task.getName() === name);
