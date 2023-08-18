@@ -1,66 +1,64 @@
 export default class Project {
-    constructor(name) {
-        this.name = name;
-        this.tasks = [];
-    }
+  constructor(name) {
+    this.name = name
+    this.tasks = []
+  }
 
-    setName(name) {
-        this.name = name;
-    }
+  setName(name) {
+    this.name = name
+  }
 
-    getName() {
-        return this.name;
-    }
+  getName() {
+    return this.name
+  }
 
-    setTasks(tasks) {
-        this.tasks = tasks;
-    }
-    
-    getTasks() {
-        return this.tasks;
-    }
+  setTasks(tasks) {
+    this.tasks = tasks
+  }
 
-    addTask(task) {
-        this.tasks.push(task)
-    }
+  getTasks() {
+    return this.tasks
+  }
 
-    getCount() {
-        let count = 0;
-        for (let task in this.tasks) {
-            ++count
+  addTask(task) {
+    this.tasks.push(task)
+  }
+
+  getCount() {
+    return this.tasks.length
+  }
+
+  renameTask(name, newName) {
+    const TODO = this.tasks.find((task) => task.getName() === name)
+    if (TODO !== undefined) {
+      TODO.setName(newName)
+    }
+  }
+
+  dateTask(date, name) {
+    const TODO = this.tasks.find((task) => task.getName() === name)
+    TODO.setDate(date)
+  }
+
+  deleteTask(name, sameName) {
+    if (sameName) {
+      const firstTODOIndex = this.tasks.findIndex(
+        (task) => task.getName() === name,
+      )
+
+      if (firstTODOIndex !== -1) {
+        const secondTODOIndex = this.tasks.findIndex(
+          (task, index) => index !== firstTODOIndex && task.getName() === name,
+        )
+
+        if (secondTODOIndex !== -1) {
+          this.tasks.splice(secondTODOIndex, 1)
         }
-        return count;
+      }
+    } else {
+      const TODO = this.tasks.find((task) => task.getName() === name)
+
+      this.tasks.splice(this.tasks.indexOf(TODO), 1)
     }
-
-    renameTask(name, newName) {
-        const TODO = this.tasks.find((task) => task.getName() == name);
-        if (TODO !== undefined) {
-            TODO.setName(newName);
-        }
-    }
-
-    dateTask(date, name) {
-        const TODO = this.tasks.find((task) => task.getName() == name);
-        TODO.setDate(date);
-    }
-
-    deleteTask(name, sameName) {
-        if (sameName) {
-            const firstTODOIndex = this.tasks.findIndex((task) => task.getName() === name);
-
-            if (firstTODOIndex !== -1) {
-                const secondTODOIndex = this.tasks.findIndex((task, index) => index !== firstTODOIndex && task.getName() === name);
-            
-                if (secondTODOIndex !== -1) {
-                    this.tasks.splice(secondTODOIndex, 1);
-                }
-            }
-        } else {
-            const TODO = this.tasks.find((task) => task.getName() == name);
-    
-            this.tasks.splice(this.tasks.indexOf(TODO), 1);
-        }
-    }
-
-
+  }
 }
