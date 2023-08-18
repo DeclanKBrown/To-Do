@@ -10,17 +10,6 @@
     src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
   }
 
-:root {
-    --aside-col: #f5f5f5;
-    --ol-col: #e8e8e8;
-    --main-col: #FFFFFF;
-    --side-text-col: #3B3E41;
-    --side-sec-text-col: #606468;
-    --sel-col: #DBDEE1;
-    --main-text-col: #0B0D11;
-    --input-col: rgba(195, 199, 202, 0.7);
-}
-
 :root.light {
     --aside-col: #f5f5f5;
     --ol-col: #e8e8e8;
@@ -52,6 +41,7 @@ body {
     display: grid;
     grid-template-columns: 45px 4fr 33fr;
     transition: all 0.15s;
+    background-color: var(--main-col);
 }
 
 /* 
@@ -322,6 +312,12 @@ main {
 }
 
 .project-name {
+    user-select: none;
+}
+
+.date-task {
+    color: var(--main-text-col);
+    background-color: var(--input-col);
     user-select: none;
 }
 

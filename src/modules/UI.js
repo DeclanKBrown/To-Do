@@ -2,6 +2,7 @@ import TODO from './todo.js'
 import Project from './project.js'
 import Storage from './storage.js'
 import { format, parse, addDays } from 'date-fns';
+import { container } from 'webpack';
 
 export default class UI {
 
@@ -11,6 +12,7 @@ export default class UI {
         UI.main();
         UI.loadProjects();
         UI.openProject(document.querySelector('#Inbox'), true)
+        UI.mode(true);
     }
 
 
@@ -109,21 +111,24 @@ export default class UI {
     }
 
 
-    static tab(e) {
+    static tab(Tab) {
         UI.removeTabStyle();
-        UI.tabStyle(e);
+        UI.tabStyle(Tab);
         UI.removeTab();
-        if (e.id === 'Today') {
-            UI.openToday(e)
+        if (Tab.id === 'Today') {
+            UI.openToday(Tab)
         }
-        else if (e.id === 'Week') {
-            UI.openWeek(e)
+        else if (Tab.id === 'Week') {
+            UI.openWeek(Tab)
         }
-        else if (e.id === 'Month') {
-            UI.openMonth(e)
+        else if (Tab.id === 'Month') {
+            UI.openMonth(Tab)
+        }
+        else if (Tab.id === 'Projects') {
+            UI.openProjDisp(Tab)
         }
         else {
-            UI.openProject(e, true);
+            UI.openProject(Tab, true);
         }
 
     }
@@ -131,6 +136,7 @@ export default class UI {
 
     static openToday(Tab) {
         document.querySelector('.title').innerHTML = Tab.id;
+        document.querySelector('.add-to-do').style = 'display:grid'
         
         const todoList = Storage.getTodoList();
 
@@ -156,6 +162,7 @@ export default class UI {
 
     static openWeek(Tab) {
         document.querySelector('.title').innerHTML = Tab.id;
+        document.querySelector('.add-to-do').style = 'display:grid'
 
         const todoList = Storage.getTodoList();
         const today = new Date(); 
@@ -182,6 +189,7 @@ export default class UI {
 
     static openMonth(Tab) {
         document.querySelector('.title').innerHTML = Tab.id;
+        document.querySelector('.add-to-do').style = 'display:grid'
 
         const todoList = Storage.getTodoList();
         const today = new Date(); 
@@ -203,6 +211,28 @@ export default class UI {
                 }
             });
         });
+    }
+
+
+    static openProjDisp(Tab) {
+        document.querySelector('.title').innerHTML = Tab.id;
+        document.querySelector('.add-to-do').style = 'display:none'
+
+        const card = document.createElement('div')
+        card.classList.add('cards-container');
+        document.querySelector('.main-inner').appendChild(card);
+
+        // Storage.getTodoList().getProjects().forEach((project) => UI.addProjCard(project))
+
+    }
+
+
+    static addProjCard(project) {
+        // const card = document.createElement('div');
+        // card.innerHTML = `
+        // <h2>${project.getName()}</h2>
+        // <span>Tasks:${project.getCount()}</span>`
+        // document.querySelector('.cards-container').appendChild(card)
     }
 
 
@@ -389,18 +419,22 @@ export default class UI {
         const toggleMode = document.querySelector('.mode-tog');
 
         addTask.addEventListener('click', () => UI.addTask('New Task'));
-        toggleMode.addEventListener('click', UI.mode)
+        toggleMode.addEventListener('click', () => UI.mode(false))
     }
 
 
     static removeTab() {
         document.querySelector('.title').innerHTML = '';
         document.querySelector('.tasks-container').innerHTML = '';
+        if (document.querySelector('.cards-container') !== null) {
+            document.querySelector('.cards-container').remove()
+        }
     }
 
 
     static openProject(Tab, pageLoad = false) {
         document.querySelector('.title').innerHTML = Tab.id;
+        document.querySelector('.add-to-do').style = 'display:grid'
         
         const proj = Storage.getTodoList().getProjects().find((project) => project.getName() === Tab.id);
         if (proj !== undefined) {
@@ -409,9 +443,17 @@ export default class UI {
     }
 
 
-    static mode() {
+    static mode(onload) {
         const root = document.documentElement;
-        const newTheme = root.className === 'dark' ? 'light' : 'dark';
+        let newTheme;
+
+        if (onload) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                newTheme = 'dark';
+            }
+        } else {
+            newTheme = root.className === 'dark' ? 'light' : 'dark';
+        }
         root.className = newTheme;
 
         const icon = document.querySelector('.mode-tog')
@@ -424,6 +466,9 @@ export default class UI {
 
 
     static addTask(name, date, pageLoad) {
+        if (date === undefined) {
+            date = 'No Date'
+        }
         const taskDOM = document.createElement('div');
         taskDOM.id = name;
         taskDOM.classList.add('task');
@@ -474,10 +519,11 @@ export default class UI {
                     inputField.value = 'New Task';
                 } 
 
-                console.log(textbox.innerHTML)
-                console.log(inputField.value)
-                console.log(projName)
-                Storage.renameTask(textbox.innerHTML.trim(), inputField.value.trim(), projName); // Modules
+                if (projName === 'Today' || projName === 'Week' || projName === 'Month') {
+                    Storage.renameTimeTask(textbox.innerHTML.trim(), inputField.value.trim());
+                } else {
+                    Storage.renameTask(textbox.innerHTML.trim(), inputField.value.trim(), projName); // Modules
+                }
 
                 const name = textbox.innerHTML.trim(); //
 
@@ -490,6 +536,7 @@ export default class UI {
             });
         }
     }
+
 
     static checkTaskName(inputField, name, oldName, projName, isBlur, okDel) {
         const list = Storage.getTodoList();
@@ -542,16 +589,18 @@ export default class UI {
         inputField.focus();
 
         inputField.addEventListener('blur', function() {
+            let formattedDate;
             if (inputField.value === '') {
-                inputField.value = 'No Date';
-            } 
-
-            //Formatting Date
-            const unformattedDate = inputField.value;
-            const formattedDate = unformattedDate.split('-')[2] + '-' + unformattedDate.split('-')[1] + '-' + unformattedDate.split('-')[0];
-            
+                formattedDate = 'No Date';
+            } else {
+                //Formatting Date
+                const unformattedDate = inputField.value;
+                formattedDate = unformattedDate.split('-')[2] + '-' + unformattedDate.split('-')[1] + '-' + unformattedDate.split('-')[0];
+                
+            }
             const projName = document.querySelector('.title').innerHTML;
             const taskName = inputField.parentNode.children[1].innerHTML;
+            
 
             Storage.dateTask(formattedDate, taskName, projName); // Modules
             
@@ -579,7 +628,12 @@ export default class UI {
         setTimeout(() => { task.remove() }, 250)
 
         const projName = document.querySelector('.title').innerHTML;
-        Storage.deleteTask(name, projName, sameName)
+
+        if (projName == 'Today' || projName == 'Week' || projName == 'Month') {
+            Storage.deleteTimeTask(name, sameName)
+        } else {
+            Storage.deleteTask(name, projName, sameName)
+        }
     }
 
 }

@@ -2,7 +2,7 @@ export default class TODO {
 
     constructor(name, date = 'No Date') {
         this.name = name;
-        this.date= date;
+        this.date = date;
     }
 
     setName(name) {

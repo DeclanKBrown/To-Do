@@ -26,7 +26,9 @@ export default class Project {
 
     renameTask(name, newName) {
         const TODO = this.tasks.find((task) => task.getName() == name);
-        TODO.setName(newName);
+        if (TODO !== undefined) {
+            TODO.setName(newName);
+        }
     }
 
     dateTask(date, name) {
