@@ -69,6 +69,14 @@ export default class UI {
                         </span>
                         <h1>Month</h1>
                     </div>
+                    <div class="side-tab" id="Anytime">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M14,10V4.5L19.5,10M5,3C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V9L15,3H5Z" />
+                            </svg>
+                        </span>
+                        <h1>Anytime</h1>
+                    </div>
                 </div>
                 <div class="projects-container">
                     <div class="side-tab" id="Projects">
@@ -113,96 +121,7 @@ export default class UI {
         UI.removeTabStyle();
         UI.tabStyle(e);
         UI.removeTab();
-        if (e.id === 'Today') {
-            UI.openToday(e)
-        }
-        else if (e.id === 'Week') {
-            UI.openWeek(e)
-        }
-        else if (e.id === 'Month') {
-            UI.openMonth(e)
-        }
-        else {
-            UI.openProject(e, true);
-        }
-
-    }
-
-
-    static openToday(Tab) {
-        document.querySelector('.title').innerHTML = Tab.id;
-        
-        const todoList = Storage.getTodoList();
-
-        todoList.getProjects().forEach((proj) => {
-            proj.getTasks().forEach((task) => {
-                const taskDate = task.getDate();
-                if (taskDate != 'No Date') {
-                    const [day, month, year] = taskDate.split('-');
-                    const parsedDate = new Date(`${year}-${month}-${day}`);
-                    const currentDate = new Date();
-
-                    parsedDate.setHours(0, 0, 0, 0);
-                    currentDate.setHours(0, 0, 0, 0);
-                    
-                    if (parsedDate.getTime() === currentDate.getTime()) {
-                        UI.addTask(task.getName(), task.getDate(), false)
-                    }
-                }
-            })
-        })
-    }
-
-
-    static openWeek(Tab) {
-        document.querySelector('.title').innerHTML = Tab.id;
-
-        const todoList = Storage.getTodoList();
-        const today = new Date(); 
-        
-        todoList.getProjects().forEach((proj) => {
-            proj.getTasks().forEach((task) => {
-                const taskDate = task.getDate();
-                if (taskDate !== 'No Date') {
-                    const [day, month, year] = taskDate.split('-');
-                    const parsedDate = new Date(`${year}-${month}-${day}`);
-                    
-                    // Calculate the start and end of the current week
-                    const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
-                    const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (6 - today.getDay()));
-                    
-                    if (parsedDate >= startOfWeek && parsedDate <= endOfWeek) {
-                        UI.addTask(task.getName(), task.getDate(), false);
-                    }
-                }
-            });
-        });        
-    }
-
-
-    static openMonth(Tab) {
-        document.querySelector('.title').innerHTML = Tab.id;
-
-        const todoList = Storage.getTodoList();
-        const today = new Date(); 
-
-        todoList.getProjects().forEach((proj) => {
-            proj.getTasks().forEach((task) => {
-                const taskDate = task.getDate();
-                if (taskDate !== 'No Date') {
-                    const [day, month, year] = taskDate.split('-');
-                    const parsedDate = new Date(`${year}-${month}-${day}`);
-                    
-                    // Calculate the start and end of the current month
-                    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-                    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                    
-                    if (parsedDate >= startOfMonth && parsedDate <= endOfMonth) {
-                        UI.addTask(task.getName(), task.getDate(), false);
-                    }
-                }
-            });
-        });
+        UI.openProject(e, true);
     }
 
 
