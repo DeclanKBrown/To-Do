@@ -321,6 +321,33 @@ main {
     user-select: none;
 }
 
+.card-container {
+    max-height: 70vh;
+    overflow-y: scroll;
+}
+
+.proj-card {
+    display: grid;
+    grid-template-columns: 22px auto 10rem;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    color: var(--main-text-col);
+    padding: 0.2rem 0;
+    padding-right: 1rem;
+}
+
+.proj-card svg {
+    fill: var(--main-text-col);
+}
+
+.proj-card:hover {
+    background-color: var(--sel-col);
+    border-radius: 0.3rem;
+}
+
 
 
 
