@@ -8,7 +8,6 @@ export default class List {
         this.projects.push(new Project('Today'));
         this.projects.push(new Project('Week'));
         this.projects.push(new Project('Month'));
-        this.projects.push(new Project('Anytime'));
     }
 
     setProjects(projects) {

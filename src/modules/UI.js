@@ -2,7 +2,7 @@ import TODO from './todo.js'
 import Project from './project.js'
 import Storage from './storage.js'
 import { format, parse, addDays } from 'date-fns';
-import { container } from 'webpack';
+
 
 export default class UI {
 
@@ -222,17 +222,21 @@ export default class UI {
         card.classList.add('cards-container');
         document.querySelector('.main-inner').appendChild(card);
 
-        // Storage.getTodoList().getProjects().forEach((project) => UI.addProjCard(project))
+        Storage.getTodoList().getProjects().forEach((project) => {
+            if (project.getName() !== 'Inbox' && project.getName() !== 'Today' && project.getName() !== 'Week' && project.getName() !== 'Month') {
+                UI.addProjCard(project)
+            }
+        })
 
     }
 
 
     static addProjCard(project) {
-        // const card = document.createElement('div');
-        // card.innerHTML = `
-        // <h2>${project.getName()}</h2>
-        // <span>Tasks:${project.getCount()}</span>`
-        // document.querySelector('.cards-container').appendChild(card)
+        const card = document.createElement('div');
+        card.innerHTML = `
+        <h2>${project.getName()}</h2>
+        <span>Tasks:${project.getCount()}</span>`
+        document.querySelector('.cards-container').appendChild(card)
     }
 
 

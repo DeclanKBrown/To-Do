@@ -24,6 +24,14 @@ export default class Project {
         this.tasks.push(task)
     }
 
+    getCount() {
+        let count = 0;
+        for (let task in this.tasks) {
+            ++count
+        }
+        return count;
+    }
+
     renameTask(name, newName) {
         const TODO = this.tasks.find((task) => task.getName() == name);
         if (TODO !== undefined) {
